@@ -1,0 +1,3 @@
+# Ignore IDEs environment configuration and generate files
+.idea/
+.out/
