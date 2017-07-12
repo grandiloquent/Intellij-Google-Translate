@@ -16,30 +16,33 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 
 public class Translator {
+    // [[["We are all good kids. ","我们都是好孩子。",null,null,1],["You are a pig","你是猪",null,null,1]],null,"zh-CN",null,null,null,0.94138455,null,[["zh-CN"],null,[0.94138455],["zh-CN"]]]
 
     private static final String TRANSLATE_URL = "http://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=%s&dt=t&q=%s";
 
-    private final Document mDocument;
+    private static Pattern sPattern = Pattern.compile("(?<=\\[)\\\"([^\\\"]*?)\\\"(?!\\])");
 
     private static Translator mTranslator;
 
 
-    public Translator(Document document) {
-        mDocument = document;
+    public Translator() {
     }
 
-    public static Translator get(Document document) {
+    public static Translator get() {
         if (mTranslator == null) {
-            mTranslator = new Translator(document);
+            mTranslator = new Translator();
         }
         return mTranslator;
     }
 
-    public void query(int start, int end, String query) {
-        String url = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=en&dt=t&q=" + URLEncoder.encode(query);
+    public void query(int start, int end, String query, String targetLanguage, Document document) {
+        // https://translate.google.cn/translate_a/single?client=gtx&sl=auto&tl=zh&dt=t&dt=bd&ie=UTF-8&oe=UTF-8&dj=1&source=icon&q=我嫩
+        String url = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=" + targetLanguage + "&dt=t&q=" + URLEncoder.encode(query);
         CloseableHttpClient httpclient = HttpClients.createMinimal();
 
         String result;
@@ -76,7 +79,13 @@ public class Translator {
                     while ((line = br.readLine()) != null) {
                         sb.append(line + "\n");
                     }
-                    return sb.toString();
+                    String result = "";
+                    Matcher matcher = sPattern.matcher(sb.toString());
+                    while (matcher.find()) {
+                        result += matcher.group(1);
+                    }
+
+                    return result;
 
                 }
             });
@@ -102,7 +111,7 @@ public class Translator {
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                mDocument.replaceString(start, end, translateResult);
+                document.replaceString(start, end, translateResult);
 
             }
         };
@@ -115,8 +124,6 @@ public class Translator {
         } else {
             application.invokeLater(() -> application.runWriteAction(runnable));
         }
-
-
 
 
     }

@@ -1,12 +1,13 @@
 <idea-plugin version="2">
-    <id>com.your.company.unique.plugin.id</id>
-    <name>翻译</name>
-    <version>1.0</version>
+    <id>cn.everstore.translator</id>
+    <name>Translator</name>
+    <version>1.1</version>
     <vendor email="support@yourcompany.com" url="http://www.yourcompany.com">YourCompany</vendor>
 
     <description><![CDATA[
       Enter short description for your plugin here.<br>
       <em>most HTML tags may be used</em>
+      我们
     ]]></description>
 
     <change-notes><![CDATA[
@@ -16,23 +17,31 @@
     </change-notes>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
-    <idea-version since-build="145.0"/>
+    <idea-version since-build="107.105"/>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
          on how to target different products -->
-    <!-- uncomment to enable plugin in all products
+    <!-- uncomment to enable plugin in all products            <add-to-group group-id="ToolsMenu" anchor="first"/>
+
     <depends>com.intellij.modules.lang</depends>
     -->
-
+    <depends>com.intellij.modules.lang</depends>
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
     </extensions>
 
     <actions>
-        <action id="TranslationAction" class="psycho.TranslationAction" text="Google"
-                description="Illustrates how to plug an action in">
-            <keyboard-shortcut first-keystroke="F2" keymap="$default"/>
-            <add-to-group group-id="ToolsMenu" anchor="first"/>
+        <action id="TranslationAction" class="psycho.TranslationAction" text="English"
+                description="翻译">
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="alt 1"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="alt NUMPAD1"/>
+        </action>
+        <action id="TranslationChineseAction" class="psycho.TranslationChineseAction" text="Chinese"
+                description="翻译">
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="alt 2"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="alt NUMPAD2"/>
         </action>
     </actions>
 

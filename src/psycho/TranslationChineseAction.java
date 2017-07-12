@@ -10,7 +10,7 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.SelectionModel;
 import com.intellij.openapi.project.Project;
 
-public class TranslationAction extends AnAction {
+public class TranslationChineseAction extends AnAction {
 
 
     @Override
@@ -30,7 +30,7 @@ public class TranslationAction extends AnAction {
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                Translator.get().query(start, end, selectionModel.getSelectedText(), "en",document);
+                Translator.get().query(start, end, selectionModel.getSelectedText(), "zh",document);
             }
         };
         //Making the replacement
